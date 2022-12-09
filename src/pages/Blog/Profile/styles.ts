@@ -23,6 +23,8 @@ export const Avatar = styled.div`
 `
 
 export const ProfileInformationContainer = styled.div`
+  width: 100%;
+
   header {
     display: flex;
     align-items: flex-start;

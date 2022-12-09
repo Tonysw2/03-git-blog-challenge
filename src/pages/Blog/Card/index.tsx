@@ -1,7 +1,7 @@
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { useNavigate } from 'react-router-dom'
-import { IssueType } from '..'
+import { IssueType } from '../../../contexts/issuesContext'
 import { CardWrap } from './styles'
 
 interface CardProps {
@@ -12,7 +12,7 @@ export function Card({ issue }: CardProps) {
   const navigate = useNavigate()
 
   function goTo() {
-    navigate('/post')
+    navigate(`post/${issue.number}`)
   }
 
   return (

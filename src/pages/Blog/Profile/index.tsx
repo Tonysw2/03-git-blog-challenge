@@ -5,7 +5,7 @@ import { Avatar, ProfileContainer, ProfileInformationContainer } from './styles'
 
 interface UserDataType {
   login: string
-  url: string
+  html_url: string
   avatar_url: string
   bio: string
   company: string
@@ -17,10 +17,14 @@ export function Profile() {
   const [userData, setUserData] = useState<UserDataType>({} as UserDataType)
 
   const fetchUser = useCallback(async () => {
-    const response = await api.get('users/diego3g')
-    const data = await response.data
+    try {
+      const response = await api.get('users/tonysw2')
+      const data = await response.data
 
-    setUserData(data)
+      setUserData(data)
+    } catch (error) {
+      console.log(error)
+    }
   }, [])
 
   useEffect(() => {
@@ -34,10 +38,10 @@ export function Profile() {
       </Avatar>
 
       <ProfileInformationContainer>
-        <header>
+        <header onMouseEnter={() => console.log('worth')}>
           <p>{userData.name}</p>
 
-          <a href={userData.url}>
+          <a href={userData.html_url} target="_blank" rel="noreferrer">
             github
             <ArrowSquareOut size={12} weight="bold" />
           </a>

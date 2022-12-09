@@ -1,31 +1,11 @@
-import { useEffect, useState } from 'react'
-import { api } from '../../lib/api'
+import { useContext } from 'react'
+import { IssueContext } from '../../contexts/issuesContext'
 import { Card } from './Card'
 import { Profile } from './Profile'
 import { BlogContainer, CardContainer, SearhcFormContainer } from './styles'
 
-export interface IssueType {
-  title: string
-  body: string
-  created_at: string
-  id: number
-}
-
 export function Blog() {
-  const [allIssues, setAllIssues] = useState<IssueType[]>([])
-
-  async function fetchIssues() {
-    const response = await api.get(
-      'repos/rocketseat-education/reactjs-github-blog-challenge/issues',
-    )
-    const data = response.data
-    console.log(data)
-    setAllIssues(data)
-  }
-
-  useEffect(() => {
-    fetchIssues()
-  }, [])
+  const { allIssues } = useContext(IssueContext)
 
   return (
     <BlogContainer>
