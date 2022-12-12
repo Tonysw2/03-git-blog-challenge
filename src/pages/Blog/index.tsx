@@ -1,26 +1,47 @@
-import { useContext } from 'react'
-import { IssueContext } from '../../contexts/issuesContext'
-import { Card } from './Card'
-import { Profile } from './Profile'
-import { BlogContainer, CardContainer, SearhcFormContainer } from './styles'
+import { useEffect, useState } from 'react'
+import { api } from '../../lib/api'
+import { PostCard } from './components/PostCard'
+import { Profile } from './components/Profile'
+import { SearchForm } from './components/SearchForm'
+import { BlogContainer, CardContainer } from './styles'
+
+export interface IssueType {
+  title: string
+  body: string
+  created_at: string
+  html_url: string
+  id: number
+  number: number
+}
 
 export function Blog() {
-  const { allIssues } = useContext(IssueContext)
+  const [allIssues, setAllIssues] = useState<IssueType[]>([])
+
+  async function fetchIssues() {
+    try {
+      const response = await api.get(
+        'repos/Tonysw2/03-git-blog-challenge/issues',
+      )
+      const data = await response.data
+      setAllIssues(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchIssues()
+  }, [])
 
   return (
     <BlogContainer>
       <Profile />
 
-      <SearhcFormContainer>
-        <label htmlFor="search">
-          Publicações <span>{allIssues.length} publicações</span>
-        </label>
-        <input id="search" type="text" placeholder="Buscar conteúdo" />
-      </SearhcFormContainer>
+      <SearchForm />
 
       <CardContainer>
         {allIssues.length
-          ? allIssues.map((issue) => <Card key={issue.id} issue={issue} />)
+          ? allIssues.map((issue) => <PostCard key={issue.id} issue={issue} />)
           : null}
       </CardContainer>
     </BlogContainer>

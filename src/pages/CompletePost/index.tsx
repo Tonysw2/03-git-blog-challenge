@@ -1,3 +1,5 @@
+import { formatDistanceToNow } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import {
   ArrowSquareOut,
   Calendar,
@@ -5,28 +7,15 @@ import {
   ChatCircle,
   GithubLogo,
 } from 'phosphor-react'
-import { useCallback, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Link, useParams } from 'react-router-dom'
-import { IssueType } from '../../contexts/issuesContext'
-import { api } from '../../lib/api'
+import { UserContext } from '../../contexts/userContext'
 import { CompletePostContainer, CompletePostContent } from './styles'
 
 export function CompletePost() {
-  const [post, setPost] = useState<IssueType>()
+  const { user, post, fetchIssue } = useContext(UserContext)
   const { issueNumber } = useParams()
-
-  const fetchIssue = useCallback(async (issueNumber: number) => {
-    try {
-      const response = await api.get(
-        `repos/Tonysw2/03-git-blog-challenge/issues/${issueNumber}`,
-      )
-      const data = await response.data
-      setPost(data)
-    } catch (error) {
-      console.log(error)
-    }
-  }, [])
 
   useEffect(() => {
     fetchIssue(Number(issueNumber))
@@ -51,16 +40,22 @@ export function CompletePost() {
         <div>
           <p>
             <GithubLogo weight="fill" size={18} />
-            cameronwll
+            {user.login}
           </p>
 
           <p>
             <Calendar weight="fill" size={18} />
-            Há 1 dia
+            {post.created_at
+              ? formatDistanceToNow(new Date(post.created_at), {
+                  addSuffix: true,
+                  locale: ptBR,
+                })
+              : null}
           </p>
 
           <p>
-            <ChatCircle weight="fill" size={18} />5 Comentários
+            <ChatCircle weight="fill" size={18} />
+            {post?.comments} Comentários
           </p>
         </div>
       </header>

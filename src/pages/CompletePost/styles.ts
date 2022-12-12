@@ -67,4 +67,21 @@ export const CompletePostContainer = styled.div`
 export const CompletePostContent = styled.div`
   padding: 2.5rem 2rem;
   text-align: justify;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  hyphens: auto;
+
+  & > img {
+    max-width: '100%';
+  }
+
+  & > ul {
+    list-style-position: inside;
+  }
+
+  & > pre {
+    padding: 1rem;
+    background-color: ${(props) => props.theme['slate-500']};
+    border-radius: 6px;
+  }
 `

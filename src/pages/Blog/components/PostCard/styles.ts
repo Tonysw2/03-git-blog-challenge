@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const CardWrap = styled.div`
+export const CardWrap = styled.li`
   max-width: 26rem;
   min-height: 16.25rem;
   padding: 2rem;
@@ -16,18 +16,21 @@ export const CardWrap = styled.div`
   & > div {
     display: flex;
     align-items: flex-start;
-    justify-content: space-between;
+    justify-content: center;
     gap: 1rem;
 
     margin-bottom: 1.5rem;
 
     & > h1 {
+      width: min(25rem, 80%);
       font-weight: 700;
       font-size: 1.25rem;
       line-height: 1.6;
     }
 
-    & > span {
+    & > p {
+      width: min(12rem, 20%);
+      display: block;
       font-size: 0.875rem;
       line-height: 1.6;
       color: ${(props) => props.theme['slate-300']};

@@ -1,14 +1,14 @@
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { useNavigate } from 'react-router-dom'
-import { IssueType } from '../../../contexts/issuesContext'
+import { IssueType } from '../..'
 import { CardWrap } from './styles'
 
 interface CardProps {
   issue: IssueType
 }
 
-export function Card({ issue }: CardProps) {
+export function PostCard({ issue }: CardProps) {
   const navigate = useNavigate()
 
   function goTo() {
@@ -19,12 +19,12 @@ export function Card({ issue }: CardProps) {
     <CardWrap onClick={goTo}>
       <div>
         <h1>{issue.title}</h1>
-        <span>
+        <p>
           {formatDistanceToNow(new Date(issue.created_at), {
             addSuffix: true,
             locale: ptBR,
           })}
-        </span>
+        </p>
       </div>
 
       <p>{issue.body}</p>
