@@ -7,15 +7,37 @@ import {
   ChatCircle,
   GithubLogo,
 } from 'phosphor-react'
-import { useContext, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Link, useParams } from 'react-router-dom'
-import { UserContext } from '../../contexts/userContext'
+import { GITHUB_USERNAME } from '../../constants/constants'
+import { api } from '../../lib/api'
 import { CompletePostContainer, CompletePostContent } from './styles'
 
+interface PostType {
+  html_url: string
+  title: string
+  body: string
+  comments: number
+  created_at: Date
+  user: { login: string }
+}
+
 export function CompletePost() {
-  const { user, post, fetchIssue } = useContext(UserContext)
+  const [post, setPost] = useState<PostType>({} as PostType)
   const { issueNumber } = useParams()
+
+  const fetchIssue = useCallback(async (issueNumber: number) => {
+    try {
+      const response = await api.get(
+        `repos/${GITHUB_USERNAME}/03-git-blog-challenge/issues/${issueNumber}`,
+      )
+      const data = await response.data
+      setPost(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }, [])
 
   useEffect(() => {
     fetchIssue(Number(issueNumber))
@@ -40,7 +62,7 @@ export function CompletePost() {
         <div>
           <p>
             <GithubLogo weight="fill" size={18} />
-            {user.login}
+            {post.user.login}
           </p>
 
           <p>

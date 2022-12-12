@@ -5,7 +5,7 @@ export const BlogContainer = styled.div`
   width: min(54rem, 90%);
 `
 
-export const CardContainer = styled.ul`
+export const PostListContainer = styled.ul`
   margin: 0 auto;
   max-width: 54rem;
   display: flex;

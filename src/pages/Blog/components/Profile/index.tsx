@@ -1,10 +1,36 @@
 import { ArrowSquareOut, Buildings, GithubLogo, Users } from 'phosphor-react'
-import { useContext } from 'react'
-import { UserContext } from '../../../../contexts/userContext'
+import { useCallback, useEffect, useState } from 'react'
+import { GITHUB_USERNAME } from '../../../../constants/constants'
+import { api } from '../../../../lib/api'
 import { Avatar, ProfileContainer, ProfileInformationContainer } from './styles'
 
+interface UserType {
+  login: string
+  html_url: string
+  avatar_url: string
+  bio: string
+  company: string
+  name: string
+  followers: string
+}
+
 export function Profile() {
-  const { user } = useContext(UserContext)
+  const [user, setUser] = useState<UserType>({} as UserType)
+
+  const fetchUser = useCallback(async () => {
+    try {
+      const response = await api.get(`users/${GITHUB_USERNAME}`)
+      const data = await response.data
+
+      setUser(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchUser()
+  }, [fetchUser])
 
   return (
     <ProfileContainer>

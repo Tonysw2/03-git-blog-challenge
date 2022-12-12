@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { GITHUB_REPOSITORY, GITHUB_USERNAME } from '../../constants/constants'
 import { api } from '../../lib/api'
 import { PostCard } from './components/PostCard'
 import { Profile } from './components/Profile'
 import { SearchForm } from './components/SearchForm'
-import { BlogContainer, CardContainer } from './styles'
+import { BlogContainer, PostListContainer } from './styles'
 
 export interface IssueType {
   title: string
@@ -17,21 +18,21 @@ export interface IssueType {
 export function Blog() {
   const [allIssues, setAllIssues] = useState<IssueType[]>([])
 
-  async function fetchIssues() {
+  const fetchIssues = useCallback(async () => {
     try {
       const response = await api.get(
-        'repos/Tonysw2/03-git-blog-challenge/issues',
+        `repos/${GITHUB_USERNAME}/${GITHUB_REPOSITORY}/issues`,
       )
       const data = await response.data
       setAllIssues(data)
     } catch (error) {
       console.log(error)
     }
-  }
+  }, [])
 
   useEffect(() => {
     fetchIssues()
-  }, [])
+  }, [fetchIssues])
 
   return (
     <BlogContainer>
@@ -39,11 +40,11 @@ export function Blog() {
 
       <SearchForm />
 
-      <CardContainer>
+      <PostListContainer>
         {allIssues.length
           ? allIssues.map((issue) => <PostCard key={issue.id} issue={issue} />)
           : null}
-      </CardContainer>
+      </PostListContainer>
     </BlogContainer>
   )
 }
