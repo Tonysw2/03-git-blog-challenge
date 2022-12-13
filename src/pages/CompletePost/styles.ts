@@ -67,21 +67,25 @@ export const CompletePostContainer = styled.div`
 export const CompletePostContent = styled.div`
   padding: 2.5rem 2rem;
   text-align: justify;
-  white-space: pre-wrap;
-  line-height: 1.6;
-  hyphens: auto;
 
-  & > img {
-    max-width: '100%';
-  }
+  .react-markdown {
+    white-space: pre-wrap;
+    line-height: 1.6;
+    hyphens: auto;
 
-  & > ul {
-    list-style-position: inside;
-  }
+    & > img {
+      max-width: '100%';
+    }
 
-  & > pre {
-    padding: 1rem;
-    background-color: ${(props) => props.theme['slate-500']};
-    border-radius: 6px;
+    & > ul {
+      list-style-position: inside;
+    }
+
+    & > pre {
+      word-wrap: break-word;
+      padding: 1rem;
+      background-color: ${(props) => props.theme['slate-500']};
+      border-radius: 6px;
+    }
   }
 `
