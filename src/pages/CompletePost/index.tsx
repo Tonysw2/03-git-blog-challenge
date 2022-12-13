@@ -10,6 +10,7 @@ import {
 import { useCallback, useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Link, useParams } from 'react-router-dom'
+import remarkGfm from 'remark-gfm'
 import { GITHUB_USERNAME } from '../../constants/constants'
 import { api } from '../../lib/api'
 import { CompletePostContainer, CompletePostContent } from './styles'
@@ -26,6 +27,7 @@ interface PostType {
 export function CompletePost() {
   const [post, setPost] = useState<PostType>({} as PostType)
   const { issueNumber } = useParams()
+  console.log(post)
 
   const fetchIssue = useCallback(async (issueNumber: number) => {
     try {
@@ -83,7 +85,11 @@ export function CompletePost() {
       </header>
 
       <CompletePostContent>
-        {post ? <ReactMarkdown>{post.body}</ReactMarkdown> : null}
+        {post ? (
+          <ReactMarkdown className="react-markdown" remarkPlugins={[remarkGfm]}>
+            {post.body}
+          </ReactMarkdown>
+        ) : null}
       </CompletePostContent>
     </CompletePostContainer>
   )

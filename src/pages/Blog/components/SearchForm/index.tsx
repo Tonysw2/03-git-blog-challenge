@@ -1,31 +1,13 @@
-import { ChangeEvent, FormEvent, useState } from 'react'
-import { api } from '../../../../lib/api'
+import { ChangeEvent, useState } from 'react'
 import { SearhcFormContainer } from './styles'
 
-interface SearchIssueParamsType {
-  query: string
-  userName: string
-  repo: string
+interface SearchFormProps {
+  issuesAmount: number
+  onSubmitHandler: (query: string) => void
 }
 
-export function SearchForm() {
+export function SearchForm({ onSubmitHandler, issuesAmount }: SearchFormProps) {
   const [query, setQuery] = useState('')
-  const [searchedIssue, setSearchedIssue] = useState()
-
-  async function fetchSearchedIssue(URLparams: SearchIssueParamsType) {
-    try {
-      const response = await api.get(
-        `search/issues/q=${URLparams.query}%20repo:${URLparams.repo}/${URLparams.userName}`,
-      )
-      const data = response.data
-      console.log(data)
-      setSearchedIssue(data)
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setQuery('')
-    }
-  }
 
   function handleSearchInputChange(event: ChangeEvent<HTMLInputElement>) {
     setQuery(event.target.value)
@@ -33,18 +15,14 @@ export function SearchForm() {
 
   return (
     <SearhcFormContainer
-      onSubmit={(event: FormEvent) => {
-        event.preventDefault()
-
-        fetchSearchedIssue({
-          query,
-          userName: 'Tonysw2',
-          repo: '03-git-blog-challenge',
-        })
+      onSubmit={(e) => {
+        e.preventDefault()
+        onSubmitHandler(query)
+        setQuery('')
       }}
     >
       <label htmlFor="search">
-        Publicações <span>1 publicações</span>
+        Publicações <span>{issuesAmount} publicações</span>
       </label>
 
       <input

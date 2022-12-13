@@ -16,7 +16,7 @@ export interface IssueType {
 }
 
 export function Blog() {
-  const [allIssues, setAllIssues] = useState<IssueType[]>([])
+  const [issues, setIssues] = useState<IssueType[]>([])
 
   const fetchIssues = useCallback(async () => {
     try {
@@ -24,9 +24,27 @@ export function Blog() {
         `repos/${GITHUB_USERNAME}/${GITHUB_REPOSITORY}/issues`,
       )
       const data = await response.data
-      setAllIssues(data)
+      setIssues(data)
     } catch (error) {
       console.log(error)
+    }
+  }, [])
+
+  const fetchSearchedIssues = useCallback(async (query: string) => {
+    try {
+      const response = await api.get(
+        `search/issues?q=${query}%20repo:${GITHUB_USERNAME}/${GITHUB_REPOSITORY}`,
+      )
+      const data = await response.data
+
+      if (data.total_count === 0) {
+        alert('No issues was found with this name, try again!')
+        return
+      }
+
+      setIssues(data.items)
+    } catch (error: any) {
+      alert(error.message)
     }
   }, [])
 
@@ -38,11 +56,14 @@ export function Blog() {
     <BlogContainer>
       <Profile />
 
-      <SearchForm />
+      <SearchForm
+        onSubmitHandler={fetchSearchedIssues}
+        issuesAmount={issues.length}
+      />
 
       <PostListContainer>
-        {allIssues.length
-          ? allIssues.map((issue) => <PostCard key={issue.id} issue={issue} />)
+        {issues.length
+          ? issues.map((issue) => <PostCard key={issue.id} issue={issue} />)
           : null}
       </PostListContainer>
     </BlogContainer>
